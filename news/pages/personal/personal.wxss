@@ -1,0 +1,40 @@
+/* pages/personal/personal.wxss */
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #eeeeee;
+}
+.firstHalf {
+  display: flex;
+  justify-content: space-between;
+  background-color: #a7d3e8;
+  padding-top: 50rpx;
+  padding-bottom: 70rpx;
+}
+.userinfo {
+  display: flex;
+  align-items: center;
+  height: 58rpx;
+  margin-left: 20rpx;
+  color: rbg(255, 255, 255);
+}
+
+.userinfo-avatar {
+  overflow: hidden;
+  width: 128rpx;
+  height: 128rpx;
+  margin: 30rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  height: 128rpx;
+}
+
+.leave {
+  padding-left: 70rpx;
+  padding-right: 30rpx;
+}
+
