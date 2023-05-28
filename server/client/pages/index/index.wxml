@@ -1,0 +1,11 @@
+<!--index.wxml-->
+<view class="container">
+  Weixin
+  <button bindtap="search"></button>
+</view>
+
+<view>
+  <input bindchange="change" id="username">用户</input>
+  <input bindchange="change" id="password" type="safe-password">密码</input>
+  <button bindtap="login"></button>
+</view>
