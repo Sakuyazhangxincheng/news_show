@@ -16,7 +16,7 @@ Page({
       success: res => {
         console.log('login code: ' + res.code)
         wx.request({
-          url: 'http://127.0.0.1:3000/login',
+          url: 'http://127.0.0.1:3000/user/login',
           method: 'post',
           data: {code: res.code,username:this.username,password:this.password},
           success: res => { 
@@ -56,6 +56,20 @@ Page({
         });
 }
         // 将token保存为公共数据（用于在多页面中访问
+       }
+    })
+  },
+  collect_search:function(){
+    wx.request({
+      url: 'http://127.0.0.1:3000/collection/search',
+      method: 'post',
+      data: {username: this.username},
+      header: {
+        'Authorization': this.globalData.token, 
+      },
+      success: res => { 
+        var data = res.data; // 获取响应数据
+      console.log(JSON.stringify(data));
        }
     })
   }
