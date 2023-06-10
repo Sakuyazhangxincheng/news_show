@@ -59,7 +59,7 @@ Page({
        }
     })
   },
-  collect_search:function(){
+  collection_search:function(){
     wx.request({
       url: 'http://127.0.0.1:3000/collection/search',
       method: 'post',
