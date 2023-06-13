@@ -18,7 +18,7 @@ drop table if exists user;
 create table collection
 (
    collection_id        int,
-   user_id              int,
+   user_id              char(255),
    news_id              int
 );
 
@@ -28,7 +28,7 @@ create table collection
 create table comment
 (
    comment_id           int,
-   user_id              int,
+   user_id              char(255),
    news_id              int,
    comment              char(255)
 );
@@ -53,7 +53,7 @@ create table news
 /*==============================================================*/
 create table user
 (
-   user_id              int not null comment 'Ψһ��ʶ��',
+   user_id              char(255) not null comment 'Ψһ��ʶ��',
    username             char(255) comment '�û��˺�',
    password             char(255) comment '�û�����',
    img_url              char(255) comment 'ͼƬ��ַ',
