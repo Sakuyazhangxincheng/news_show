@@ -1,5 +1,8 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "log-dialog": "/components/dialog"
+  },
   "navigationBarBackgroundColor": "#a7d3e8",
-  "navigationBarTitleText": "个人中心"
+  "navigationBarTitleText": "个人中心",
+  "component": true
 }

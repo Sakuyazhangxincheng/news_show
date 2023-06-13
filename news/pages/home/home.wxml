@@ -6,16 +6,15 @@
     <view class="nav-text {{index==tabCur?'tab-on':''}}">{{item.name}}</view>
   </view>
 </scroll-view>
-<view wx:for="{{show}}" wx:key="index">
+<view wx:for="{{show}}" wx:key="uniqueKey">
  <view class="item">
-  <image class="img" src="{{item.imgsrc}}" mode="scaleToFill"></image>
+  <image class="img" src="{{item.thumbnail_pic_s}}" mode="scaleToFill"></image>
   <view class="number-wrapper">
    <text class="name">{{item.title}}</text>
    <view class="count-wrapper">
-    <text class="count">{{item.ptime}}</text>
+    <text class="count">{{item.data}}</text>
    </view>
   </view>
  </view>
 </view>
 </view>
-

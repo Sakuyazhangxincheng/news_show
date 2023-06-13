@@ -18,7 +18,7 @@ drop table if exists user;
 create table collection
 (
    collection_id        int,
-   user_id              int,
+   user_id              char(255),
    news_id              int
 );
 
@@ -28,9 +28,9 @@ create table collection
 create table comment
 (
    comment_id           int,
-   user_id              int,
+   user_id              char(255),
    news_id              int,
-   content              char(255)
+   comment              char(255)
 );
 
 /*==============================================================*/
@@ -38,13 +38,13 @@ create table comment
 /*==============================================================*/
 create table news
 (
-   news_id              int not null comment 'Ψһ��ʶ��',
-   type                 int comment '��������',
-   title                char(255) comment '���ű���',
-   publisher            char(255) comment '���ų�����',
-   url                  char(255) comment '���ʵ�ַ',
-   img_url              char(255) comment 'ͼƬ��ҳ���ʵ�ַ',
-   date                 char(255) comment '����ʱ��',
+   news_id              int not null comment 'Ψһ  ʶ  ',
+   type                 int comment '        ',
+   title                char(255) comment '   ű   ',
+   publisher            char(255) comment '   ų     ',
+   url                  char(255) comment '   ʵ ַ',
+   img_url              char(255) comment 'ͼƬ  ҳ   ʵ ַ',
+   date                 char(255) comment '    ʱ  ',
    primary key (news_id)
 );
 
@@ -53,10 +53,10 @@ create table news
 /*==============================================================*/
 create table user
 (
-   user_id              int not null comment 'Ψһ��ʶ��',
-   username             char(255) comment '�û��˺�',
-   password             char(255) comment '�û�����',
-   img_url              char(255) comment 'ͼƬ��ַ',
-   phone                char(255) comment '�ֻ�����',
+   user_id              char(255) not null comment 'Ψһ  ʶ  ',
+   username             char(255) comment ' û  ˺ ',
+   password             char(255) comment ' û     ',
+   img_url              char(255) comment 'ͼƬ  ַ',
+   phone                char(255) comment ' ֻ     ',
    primary key (user_id)
 );

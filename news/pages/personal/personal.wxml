@@ -1,19 +1,36 @@
 <!--pages/personal/personal.wxml-->
-<view class="container">
-  <!--头像昵称-->
+<view class="log-container" wx:if="{{showing}}">
+  <log-dialog
+    class="log-dialog"
+    title="{{loginInfo.title}}"
+    content="{{loginInfo.content}}"
+    logName="{{loginInfo.logName}}"
+    logImage="{{loginInfo.logImage}}"
+    bindcancel="onCancel"
+    bindconfirm="onConfirm"
+  >
+  </log-dialog>
+</view>
+  
+
+<view class="container" wx:if="{{canIUseOpenData}}">
   <view class="firstHalf">
     <view class="userinfo">
       <block wx:if="{{canIUseOpenData}}">
+        <!-- <button class="userinfo-avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+          <image class="avatar" src="{{avatarUrl}}"></image>
+        </button> -->
         <view class="userinfo-avatar">
           <open-data type="userAvatarUrl"></open-data>
         </view>
         <view class="userinfo-nickname">
           <open-data type="userNickName" style="font-weight: bold; font-size: 37rpx;"></open-data>
         </view>
+        <!-- <input type="nickname" :value="userInfo.nickName" class="userinfo-nickname" style="font-weight: bold; font-size: 37rpx; color: black; align-items: center; display: flex; justify-content: center;" @blur="bindblur"/> -->
       </block>
       <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile">获取头像昵称</button>
-        <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">获取头像昵称</button>
+        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile">授权登录</button>
+        <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权登录</button>
         <view wx:else>请使用1.4.4以上版本基础库</view>
       </block>
       <block wx:else>
@@ -25,6 +42,25 @@
 
   <view class="secondHalf">
     <view class="title">我的收藏</view>
+    <view class="myCollections">
+      <view wx:if="{{alreadyCollect}}">
+        <button bindtap="showdatas">点我</button>
+        <view class="collections" wx:for="{{collections}}" wx:key="uniqueKey">
+          <view class="item">
+            <image class="img" src="{{item.thumbnail_pic_s}}" mode="scaleToFill"></image>
+            <view class="number-wrapper">
+              <text class="name">{{item.title}}</text>
+              <view class="count-wrapper">
+                <text class="count">{{item.data}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view wx:else="{{!alreadyCollect}}" class="NoCollections">
+        <view class="noTitle">这里空空如也~</view>
+      </view>
+    </view>
   </view>
 
 
