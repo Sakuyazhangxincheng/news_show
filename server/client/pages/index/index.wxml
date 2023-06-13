@@ -1,13 +1,22 @@
 <!--index.wxml-->
 <view class="container">
   Weixin
-  <button bindtap="search">查询用户</button>
+  <button bindtap="collection_search">查询用户</button>
 </view>
 <view >
   <button bindtap="collection_search">查询收藏</button>
 </view>
+<view >
+  <button bindtap="comment_search">查询评论</button>
+</view>
+<view >
+  <button bindtap="comment_insert">添加评论</button>
+</view>
 <view>
   <input bindchange="change" id="username" placeholder="请输入用户">用户</input>
   <input bindchange="change" id="password" type="safe-password" placeholder="请输入密码">密码</input>
+  <input bindchange="change" id="user_id" placeholder="请输入userid">user</input>
+  <input bindchange="change" id="news_id" placeholder="请输入newsid">news</input>
+  <input bindchange="change" id="comment" placeholder="请输入评论内容">评论</input>
   <button bindtap="login">登录</button>
 </view>

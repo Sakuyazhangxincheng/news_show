@@ -3,7 +3,10 @@ Page({
   globalData:{token: null},
   data:{
     username:null,
-    password:null
+    password:null,
+    news_id:null,
+    user_id:null,
+    comment:null
   },
   change: function(e) {
     this[e.currentTarget.id] =(e.detail.value)
@@ -37,24 +40,20 @@ Page({
       }})
   },
 
-  search:function () {
+  comment_search:function () {
     wx.request({
-      url: 'http://127.0.0.1:3000/search',
+      url: 'http://127.0.0.1:3000/comment/search',
       method: 'post',
-      //data: {code: res.code},
+      data: {news_id:this.news_id},
+      header: {
+        'Authorization': this.globalData.token, 
+      },
       success: res => { 
         var data = res.data; // 获取响应数据
-      console.log(JSON.stringify(data));
-
-      if (Array.isArray(data.result)) {
-        data.result.forEach(user => {
-          console.log("User ID:", user.user_id);
-          console.log("Username:", user.username);
-          console.log("Password:", user.password);
-          console.log("Image URL:", user.img_url);
-          console.log("--------------------");
-        });
-}
+        console.log(data);
+        console.log(data.data[0]);
+        console.log(data.data[0].comment);
+        console.log(data.data[1]);
         // 将token保存为公共数据（用于在多页面中访问
        }
     })
@@ -64,6 +63,20 @@ Page({
       url: 'http://127.0.0.1:3000/collection/search',
       method: 'post',
       data: {username: this.username},
+      header: {
+        'Authorization': this.globalData.token, 
+      },
+      success: res => { 
+        var data = res.data; // 获取响应数据
+      console.log(JSON.stringify(data));
+       }
+    })
+  },
+  comment_insert:function(){
+    wx.request({
+      url: 'http://127.0.0.1:3000/comment/insert',
+      method: 'post',
+      data: {news_id: this.news_id,user_id:this.user_id,comment: this.comment},
       header: {
         'Authorization': this.globalData.token, 
       },
