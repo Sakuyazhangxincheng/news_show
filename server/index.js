@@ -41,12 +41,12 @@ app.post('/user/login', (req, res) => {
       wx.appid + '&secret=' + wx.secret + '&js_code=' + req.body.code +'&grant_type=authorization_code' 
       request(url, (err, response, body) => {
         var session = JSON.parse(body); 
-        console.log(session)
         if(session.openid){
         var token = "token_" + new Date().getTime();
             tokenPlace.session[token] = session;
             if(!tokenPlace.user[session.openId]){ tokenPlace.user[session.openId] = {credit: 100};}
         }
+        console.log("登录成功");
         res.json({status:200, message:"登录成功",token: token})
       })
     }
@@ -67,7 +67,7 @@ app.post('/collection/search', verifyToken, (req, res) => {
         return res.json({ status:403, message:"具有该用户名的用户Id不存在",result: null });
       }
       let userId = result[0].user_id.toString();
-      console.log("userId: 123" + userId);
+      console.log("userId:" + userId);
 
       let sql = `select news_id from collection where user_id='${userId}' `;
       // 执行搜索操作等...
@@ -86,6 +86,54 @@ app.post('/collection/search', verifyToken, (req, res) => {
   });
 });
 
+app.post('/comment/insert',verifyToken,(req,res) =>{
+  // 验证 Token 成功，继续处理请求
+  let sqlnum= 'SELECT COUNT(*) AS num FROM comment'
+
+  db.queryDatabase(sqlnum, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.json({ code:402, message:"查询数据库error" });
+    } else {
+      let count = result[0].num;
+      count++;
+      let sql = `INSERT INTO comment (comment_id,user_id,news_id,comment) VALUES (${count},${req.body.user_id},${req.body.news_id},${req.body.comment})  `;
+
+      // 执行搜索操作等...
+      db.queryDatabase(sql, (err, result) => {
+        if (err) {
+          console.log(err);
+          res.json({ code:401, message:"查询数据库error"});
+        } else {
+          return res.json({code:200, message:"查询成功"})
+        }
+      });
+    }
+  });
+  
+})
+
+
+
+
+app.post('/comment/search',verifyToken,(req,res) =>{
+  // 验证 Token 成功，继续处理请求
+  let sqlnum= `SELECT user_id,comment FROM comment where news_id='${req.body.news_id}' `;
+
+  db.queryDatabase(sqlnum, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.json({ code:402, message:"查询数据库error" });
+    } else {
+      if (result.length === 0) {
+        return res.json({ code:403, message:"该收藏没有评论",data: null });
+      }
+      console.log(result);
+      return res.json({code:200,message:"查询成功",data:result})
+    }
+  });
+  
+})
 
 
 
@@ -96,8 +144,6 @@ app.post('/collection/search', verifyToken, (req, res) => {
 function verifyToken(req, res, next) {
   // 从请求头中获取 token
   const token = req.headers.authorization;
-  console.log(token)
-  console.log(tokenPlace.session)
   // 验证 token 的有效性
   if (token && tokenPlace.session[token]) {
     // 验证成功，继续处理请求
@@ -121,18 +167,3 @@ app.get('/protected', verifyToken, (req, res) => {
 
 
 
-
-app.post('/search', (req, res) => {
-  let sql = 'select * from user';
-
-  // 调用封装的数据库查询函数
-  db.queryDatabase(sql, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.json({ result: [] });
-    } else {
-      console.log(result);
-      res.json({ result });
-    }
-  });
-});
