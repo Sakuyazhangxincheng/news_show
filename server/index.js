@@ -107,7 +107,7 @@ app.post('/comment/insert',verifyToken,(req,res) =>{
           console.log(err);
           res.json({ code:401, message:"查询数据库error"});
         } else {
-          return res.json({code:200, message:"查询成功"})
+          return res.json({code:200, message:"添加评论成功"})
         }
       });
     }
