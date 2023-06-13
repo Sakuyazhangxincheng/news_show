@@ -30,7 +30,7 @@ create table comment
    comment_id           int,
    user_id              int,
    news_id              int,
-   content              char(255)
+   comment             char(255)
 );
 
 /*==============================================================*/
