@@ -21,7 +21,8 @@ const tokenPlace = {
 
 
 app.post('/user/login', (req, res) => {
-
+  var username = null;
+  var name=null;
   // 获取token
   var url = 'https://api.weixin.qq.com/sns/jscode2session?appid=' +
       wx.appid + '&secret=' + wx.secret + '&js_code=' + req.body.code +'&grant_type=authorization_code' 
@@ -30,6 +31,7 @@ app.post('/user/login', (req, res) => {
         console.log(session);
 
         let sqluser = `select user_id from user where user_id='${session.openid}' `;
+        
         console.log(sqluser);
         // 执行搜索是否存在...
         db.queryDatabase(sqluser, (err, result) => {
@@ -41,6 +43,18 @@ app.post('/user/login', (req, res) => {
             if(result.length!==0){
               console.log('已经插入用户id了')
               //已经有了，无须插入
+              let sqll = `select username from user where user_id='${session.openid}'`;
+              db.queryDatabase(sqll, (err, result) => {
+                if (err) {
+                  console.log(err);
+                  return res.json({ status:401, message:"查询数据库error",token: null });
+                } else {
+                  // 获取到用户名
+                  username = JSON.parse(JSON.stringify(result));
+                  name = username[0].username;
+                  
+                }
+              });
             }else{
               //第一次存储，插入用户数据
               let sql = `INSERT INTO user (user_id,username,password,img_url,phone) VALUES ('${session.openid}',null,null,null,null)`
@@ -63,8 +77,14 @@ app.post('/user/login', (req, res) => {
               }
               console.log("登录成功");
               console.log('open_id: '+session.openid);
-              return res.json({status:200, message:"登录成功",openid:session.openid,token: token})
-
+              console.log(token);
+              console.log('name: '+name);
+              if(name != null && name != '') {
+                return res.json({status:200, message:"登录成功",openid:session.openid,token: token, username: name})
+              } else {
+                return res.json({status:200, message:"登录成功",openid:session.openid,token: token})
+              }
+              
           }
         });
       })
@@ -89,6 +109,21 @@ app.post('/collection/search', verifyToken, (req, res) => {
         }
       });
 });
+
+app.post('/user/setName', verifyToken, (req, res) => {
+  let sql = `update user set username='${req.body.username}'`;
+  // 执行插入操作
+  db.queryDatabase(sql, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.json({ status:401, message:"查询数据库error",token: null });
+    } else {
+      // 其他操作... 
+      console.log('成功插入用户姓名了')
+    }
+  });
+  return res.json({status:200, message:"修改姓名成功"})
+})
 
 
 app.post('/comment/insert',verifyToken,(req,res) =>{

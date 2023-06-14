@@ -3,7 +3,7 @@ Page({
   data: {
     fList: [],
     list: [],
-    key:'9d2932830c8085478849c5c45d083f0f',
+    key:'a996bb33b1b9b67f425afb5e1278c826',
     count: 0,
     show: [],
     tabName:"",

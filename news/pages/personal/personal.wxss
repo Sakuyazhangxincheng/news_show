@@ -3,12 +3,10 @@
 page {
   font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
   font-size: 10pt;
-  line-height: 150%;
   min-height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
 }
 
 .log-container {
@@ -47,33 +45,77 @@ page {
 }
 
 .container {
+  margin-top: -20;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20rpx;
+  position: relative;
+  justify-content: flex-start;
 }
 
 .firstHalf {
+  position: absolute;
+  top: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   background-color: #a7d3e8;
-  padding-top: 130rpx;
-  padding-bottom: 130rpx;
-  margin-top: -80rpx;
+  padding-top: 60rpx;
+  /* padding-top: 120rpx;
+  padding-bottom: 100rpx;
+  margin-top: -40rpx;
+  margin-bottom: -220rpx; */
   width: 750rpx;
-  border-radius: 12rpx;
-  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.2);
+  height: 220rpx;
+  /* border-radius: 12rpx;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.2); */
 }
 .userinfo {
+  align-self:center;
   justify-content: center;
   align-items: center;
-  height: 70rpx;
+  height: 170rpx;
   margin-left: 20rpx;
   color: rbg(255, 255, 255);
 }
 
+.firstSubName {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.firstName {
+  font-size: 33rpx;
+  font-weight: bold;
+}
+
+.name-button {
+  width: 22vw;
+  size: small;
+}
+
+.title {
+  /* flex-grow: 1; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 42rpx;
+  font-weight: bold;
+  color: maroon;
+  /* margin-top: 100rpx; */
+  /* margin-bottom: -120rpx; */
+  height: 60rpx;
+  width: 750px;
+  background-color: lightgrey;
+  position: relative;
+}
+
 .userinfo-avatar {
+  justify-content: center;
+  display: flex;
   overflow: hidden;
   width: 165rpx;
   height: 165rpx;
@@ -86,6 +128,8 @@ page {
   justify-content: center;
   align-items: center;
   height: 80rpx;
+  font-size: 33rpx;
+  font-weight: bold;
 }
 
 .header {
@@ -113,34 +157,16 @@ page {
   margin-top: 40rpx;
 }
 
-.bottom {
-  border-radius: 80rpx;
-  margin: 70rpx 50rpx;
-  font-size: 35rpx;
-}
 
 .secondHalf {
+  position: absolute;
+  margin-top: 220rpx;
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 12rpx;
   width: 750rpx;
-  height: 1020rpx;
-}
-
-.title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 42rpx;
-  font-weight: bold;
-  color: maroon;
-  margin-top: -990rpx;
-  height: 90rpx;
-  width: 750px;
-  background-color: lightgrey;
-  position: fixed;
 }
 
 .collection {

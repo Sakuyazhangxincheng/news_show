@@ -17,16 +17,20 @@
   <view class="firstHalf">
     <view class="userinfo">
       <block wx:if="{{canIUseOpenData}}">
-        <!-- <button class="userinfo-avatar" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{avatarUrl}}"></image>
-        </button> -->
         <view class="userinfo-avatar">
           <open-data type="userAvatarUrl"></open-data>
         </view>
-        <view class="userinfo-nickname">
+        <!-- <view class="userinfo-nickname" wx:if="{{nickName}}">
           <open-data type="userNickName" style="font-weight: bold; font-size: 37rpx;"></open-data>
+        </view> -->
+        <view wx:if="{{noName}}" class="firstSubName">
+          <!--没有用户名，需要用户输入-->
+          <input class="firstName" placeholder="输入您的用户名" type="text" name="userName" bindinput="getInputName"/>
+          <button type="primary" bindtap="submitName" class="name-button"></button>
         </view>
-        <!-- <input type="nickname" :value="userInfo.nickName" class="userinfo-nickname" style="font-weight: bold; font-size: 37rpx; color: black; align-items: center; display: flex; justify-content: center;" @blur="bindblur"/> -->
+        <view wx:else class="userinfo-nickname">
+          {{nickName}}
+        </view>
       </block>
       <block wx:elif="{{!hasUserInfo}}">
         <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile">授权登录</button>
@@ -38,30 +42,25 @@
         <text class="userinfo-nickname">{{userInfo.nickName}}</text>
       </block>
     </view>
+    <view class="title">我的收藏</view>
   </view>
 
   <view class="secondHalf">
-    <view class="title">我的收藏</view>
-    <view class="myCollections">
-      <view wx:if="{{alreadyCollect}}">
-        <button bindtap="showdatas">点我</button>
-        <view class="collections" wx:for="{{collections}}" wx:key="uniqueKey">
-          <view class="item">
-            <image class="img" src="{{item.thumbnail_pic_s}}" mode="scaleToFill"></image>
-            <view class="number-wrapper">
-              <text class="name">{{item.title}}</text>
-              <view class="count-wrapper">
-                <text class="count">{{item.data}}</text>
-              </view>
+    <view wx:if="{{alreadyCollect}}">
+      <view class="collections" wx:for="{{collections}}" wx:key="uniqueKey">
+        <view class="item">
+          <image class="img" src="{{item.thumbnail_pic_s}}" mode="scaleToFill"></image>
+          <view class="number-wrapper">
+            <text class="name">{{item.title}}</text>
+            <view class="count-wrapper">
+              <text class="count">{{item.data}}</text>
             </view>
           </view>
         </view>
       </view>
-      <view wx:else="{{!alreadyCollect}}" class="NoCollections">
-        <view class="noTitle">这里空空如也~</view>
-      </view>
+    </view>
+    <view wx:else="{{!alreadyCollect}}" class="NoCollections">
+      <view class="noTitle">这里空空如也~</view>
     </view>
   </view>
-
-
 </view>

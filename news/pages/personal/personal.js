@@ -1,7 +1,10 @@
 const app = getApp();
-const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+
 Page({
   data: {
+    nickName: wx.getStorageSync('nickName'),
+    noName: true,
+    api: 'a996bb33b1b9b67f425afb5e1278c826',
     showing: true,
     remind: '加载中',
     angle: 0,
@@ -21,7 +24,41 @@ Page({
     canIUseGetUserProfile: false,
     canIUseOpenData: false// 如需尝试获取用户信息可改为false
   },
-  login: function() {
+
+  getInputName: function(e) {
+    console.log(e);
+    let name = e.detail.value;
+    let local = e.detail.cursor;
+    this.setData({
+      nickName: name
+    })
+  },
+
+  submitName() {
+    // 把名字传输给后端，本地存缓存
+    wx.setStorageSync('nickName', this.data.nickName);
+    console.log(this.data.nickName);
+    wx.request({
+      url: 'http://localhost:3000/user/setName',
+      method: 'POST',
+      data: {
+        username: this.data.nickName
+      },
+      header: {
+        'Authorization': wx.getStorageSync('token')
+      },
+      success: (res) => {
+        if(res.data.status == 200) {
+          // 设置成功
+          this.setData({
+            noName: false
+          })
+        }
+      }
+    })
+  },
+
+  login() {
     // wx.login()获取code
     wx.login({
       success: (res) => {
@@ -33,9 +70,8 @@ Page({
             code: res.code
           },
           success: (res) => {
+            console.log(res.data);
             // 目的是为了让新用户插入数据库以及首页这边获取到用户的id
-            console.log('token:'+res.data.token);
-            console.log('openid: '+res.data.openid);
             wx.setStorageSync('token', res.data.token);
             wx.setStorageSync('userId', res.data.openid);
             this.setData({
@@ -46,7 +82,8 @@ Page({
       },
     })
   },
-  getCollections: function() {
+
+  getCollections() {
     // 获取用户收藏的新闻id
     wx.request({
       url: 'http://localhost:3000/collection/search',
@@ -67,7 +104,7 @@ Page({
           console.log('网络出问题啦~');
         } else {
           //成功，可展示新闻
-          const values = [];
+          var values = [];
           const datas = res.data.result;
           for( var i=0; i<datas.length; i++) {
             values.push(datas[i].news_id);
@@ -78,25 +115,36 @@ Page({
             collectIds : values,
             alreadyCollect: true
           });
+          console.log("1111",this.data.collectIds);
+          this.getCollectionNews();
         }
       }
     })
   },
-  showdatas: function() {
-    console.log(this.data.collectIds[0]);
-  },
-  onShareAppMessage: function() {
-    return {
-      title: '个人主页',
-      path: '/pages/home/home',
-      success: function(res) {
-      }
+  getCollectionNews() {
+    console.log("22222",this.data.collectIds);
+    var collects=[];
+    for(var i=0; i<this.data.collectIds.length;i++) {
+      console.log(this.data.collectIds[i])
+      // 根据collectIds里每一条id获取新闻
+      wx.request({
+        url: 'http://v.juhe.cn/toutiao/content?uniquekey='+this.data.collectIds[i]+'&key='+this.data.api,
+        header: {
+          'content-type': 'application/x-www-form-urlencoded'
+         },
+         success: res => {
+          console.log(res.data.result);
+          var detail = res.data.result.detail;
+          console.log('detail: ',detail);
+          collects.push(detail);
+          console.log(collects)
+          this.setData({
+            collections:collects
+          })
+         }
+      })
     }
-  },
-  gotoHome() {
-    wx.redirectTo({
-      url: '/pages/home/home',
-    });
+    console.log(this.data.collections);
   },
   onLoad() {
     wx.setNavigationBarTitle({
@@ -144,6 +192,8 @@ Page({
       })
       dialogComponent && dialogComponent.hide();
     }
+    this.login();
+    this.getCollections();
   },
   onConfirm(e) { // 点击允许
     let dialogComponent = this.selectComponent('.log-dialog');
@@ -172,13 +222,21 @@ Page({
   getUserProfile(e) {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
     wx.getUserProfile({
-      desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      desc: '获取您的个人信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
         this.setData({
-          userInfo: res.userInfo,
+          userinfo: res.userInfo,
           hasUserInfo: true
         })
-        wx.setStorageSync('userInfo', userInfo);
+        wx.setStorageSync('userinfo', userinfo);
+      },
+      fail: function(e) {
+        wx.showToast({
+          title: '你选择了取消',
+          icon: "none",
+          duration: 1500,
+          mask: true
+        })
       }
     })
   }
