@@ -1,5 +1,8 @@
 <!--index.wxml-->
 <view >
+  <button bindtap="collection_insert">添加收藏</button>
+</view>
+<view >
   <button bindtap="collection_search">查询收藏</button>
 </view>
 <view >

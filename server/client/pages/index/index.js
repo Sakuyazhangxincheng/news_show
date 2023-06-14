@@ -44,6 +44,20 @@ Page({
         })
       }})
   },
+  collection_insert:function(){
+    wx.request({
+      url: 'http://127.0.0.1:3000/collection/insert',
+      method: 'post',
+      data: {news_id: this.news_id,user_id:this.user_id},
+      header: {
+        'Authorization': this.globalData.token, 
+      },
+      success: res => { 
+        var data = res.data; // 获取响应数据
+      console.log(JSON.stringify(data));
+       }
+    })
+  },
 
   comment_search:function () {
     wx.request({

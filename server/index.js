@@ -70,6 +70,33 @@ app.post('/user/login', (req, res) => {
 });
 
 
+app.post('/collection/insert', verifyToken, (req, res) => {
+
+  let sqlnum= 'SELECT COUNT(*) AS num FROM collection'
+
+  db.queryDatabase(sqlnum, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.json({ code:402, message:"查询数据库error" });
+    } else {
+      let count = result[0].num;
+      count++;
+      let sql = `INSERT INTO collection (collection_id,user_id,news_id) VALUES (${count},'${req.body.user_id}','${req.body.news_id}')  `;
+      // 执行搜索操作等...
+      console.log(sql);
+      db.queryDatabase(sql, (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.json({ status:401, message:"查询数据库error",result: null });
+        } else {
+          return res.json({status:200, message:"收藏成功",result:result})
+        }
+      });
+    }
+  });
+      
+});
+
 app.post('/collection/search', verifyToken, (req, res) => {
  
   let sql = `select news_id from collection where user_id='${req.body.user_id}' `;
